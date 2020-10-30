@@ -7,8 +7,7 @@ class Root(models.Model):
 
 
 class Usuario(models.Model):
-    DNI = models.AutoField(primary_key=True)
-    tipoUser = models.IntegerField()
+    DNI = models.CharField(primary_key=True, max_length=100)
     password = models.CharField(max_length=100)
     nombres = models.CharField(max_length=100)
     apellidos = models.CharField(max_length=100)
@@ -17,27 +16,36 @@ class Usuario(models.Model):
     genero = models.CharField(max_length=100)
     correoElectronico = models.CharField(max_length=100)
     temasLiterarios = models.CharField(max_length=100)
-    noticias = models.BooleanField()
+    adm = models.BooleanField(default=False)
+    noticias = models.BooleanField(default=False)
 
-    def getNombreCompleto(self):
-        txt = '{1}, {2}'
-        return txt.format(self.nombres, self.apellidos)
+    def __str__(self):
+        tipo = 'Admin' if self.adm else 'Cliente'
+        noticias = 'Subscrito' if self.noticias else 'No subscrito'
+        txt = '{}: ({}) {}, {}'
+        return txt.format(tipo, self.DNI, self.correoElectronico, noticias)
 
 
 class TarjetaDeCredito(models.Model):
     idTarjeta = models.AutoField(primary_key=True)
-    tipo = models.IntegerField()
+    debito = models.BooleanField(default=False)
     numeroTarjeta = models.CharField(max_length=100)
-    saldo = models.FloatField()
+    saldo = models.FloatField(default=0)
     DNI = models.ForeignKey(Usuario, null=False, blank=False, on_delete=models.CASCADE)
 
-    def getSaldo(self):
-        return self.saldo
+    def __str__(self):
+        tipo = 'Debito' if self.debito else 'Credito'
+        txt = '{} - {}: No: {} de {} ({})  con ${} '
+        return txt.format(self.idTarjeta, tipo, self.numeroTarjeta, self.DNI.nombres, self.DNI.DNI, self.saldo)
 
 
 class Autor(models.Model):
     idAutor = models.AutoField(primary_key=True)
     nombreAutor = models.CharField(max_length=100)
+
+    def __str__(self):
+        txt = '{} - {}'
+        return txt.format(self.idAutor, self.nombreAutor)
 
 
 class Libro(models.Model):
@@ -76,7 +84,7 @@ class Noticia(models.Model):
     ISSN = models.ForeignKey(Libro, null=False, blank=False, on_delete=models.CASCADE)
 
 
-class Retirados(models.Model):
+class Retirado(models.Model):
     idRetirado = models.AutoField(primary_key=True)
     fechaDeRetiro = models.DateTimeField(auto_now_add=True)
     ISSN = models.ForeignKey(Libro, null=False, blank=False, on_delete=models.CASCADE)
