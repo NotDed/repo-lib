@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class root(models.Model):
+class Root(models.Model):
     idRoot = models.AutoField(primary_key=True)
     password = models.CharField(max_length=100)
 
@@ -24,7 +24,7 @@ class Usuario(models.Model):
         return txt.format(self.nombres, self.apellidos)
 
 
-class TarjetasDeCredito(models.Model):
+class TarjetaDeCredito(models.Model):
     idTarjeta = models.AutoField(primary_key=True)
     tipo = models.IntegerField()
     numeroTarjeta = models.CharField(max_length=100)
