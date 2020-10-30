@@ -55,7 +55,7 @@ class Compra(models.Model):
     DNI = models.ForeignKey(Usuario, null=False, blank=False, on_delete=models.CASCADE)
 
 
-class Reseva(models.Model):
+class Reserva(models.Model):
     idReserva = models.AutoField(primary_key=True)
     fechaDeReserva = models.DateTimeField(auto_now_add=True)
     DNI = models.ForeignKey(Usuario, null=False, blank=False, on_delete=models.CASCADE)
@@ -65,8 +65,8 @@ class Ejemplar(models.Model):
     idEjemplar = models.AutoField(primary_key=True)
     estado = models.IntegerField()
     ISSN = models.ForeignKey(Libro, null=False, blank=False, on_delete=models.CASCADE)
-    idCompra = models.ForeignKey(Compra, null=True)
-    idReserva = models.ForeignKey(Reserva, null=True)
+    idCompra = models.ForeignKey(Compra, null=True, on_delete=models.SET_NULL)
+    idReserva = models.ForeignKey(Reserva, null=True, on_delete=models.SET_NULL)
 
 
 class Noticia(models.Model):
@@ -76,7 +76,7 @@ class Noticia(models.Model):
     ISSN = models.ForeignKey(Libro, null=False, blank=False, on_delete=models.CASCADE)
 
 
-class retirados(models.Model):
+class Retirados(models.Model):
     idRetirado = models.AutoField(primary_key=True)
     fechaDeRetiro = models.DateTimeField(auto_now_add=True)
     ISSN = models.ForeignKey(Libro, null=False, blank=False, on_delete=models.CASCADE)
